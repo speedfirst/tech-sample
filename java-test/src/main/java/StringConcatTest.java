@@ -2,6 +2,17 @@ import java.sql.Time;
 
 /**
  * Test string concat method in Java
+ * StringBuilderTest start
+ * total time 24.517000ms, time per run 0.000025ms
+
+ * StringBufferTest start
+ * total time 34.651000ms, time per run 0.000035ms
+ *
+ * StringRawConcatTest start
+ * total time 682862.243000ms, time per run 0.682862ms
+ *
+ * StringConcatMethodTest start
+ * total time 454060.188000ms, time per run 0.454060ms
  */
 public class StringConcatTest {
     public static void main(String[] args) {
@@ -12,7 +23,7 @@ public class StringConcatTest {
     }
 
     public static abstract class TimedTest {
-        int COUNT = 10000000;
+        int COUNT = 1000000;
 
         public void run() {
             System.out.println(this.getClass().getSimpleName() + " start");
