@@ -1,3 +1,5 @@
+package org.speedfirst.test;
+
 import java.sql.Time;
 
 /**
