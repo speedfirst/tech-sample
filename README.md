@@ -1,4 +1,4 @@
-template-and-test
-=================
+tech-sample
+===========
 
-Test code or templates for various tech, libraries and frameworks.
+sample code or templates for various tech, libraries and frameworks.
