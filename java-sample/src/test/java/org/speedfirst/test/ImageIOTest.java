@@ -17,6 +17,8 @@ public class ImageIOTest {
 
     @Test
     public void testImageIO() throws IOException {
+
+        // for png format
         InputStream is = this.getClass().getResourceAsStream("imageio-test.png");
         ImageInputStream iis = ImageIO.createImageInputStream(is);
         Iterator<ImageReader> iir = ImageIO.getImageReaders(iis);
@@ -35,5 +37,19 @@ public class ImageIOTest {
         assertEquals(400, bufferedImage.getHeight()); // get height
         assertEquals(300, bufferedImage.getWidth()); // get width
         assertEquals(BufferedImage.TYPE_4BYTE_ABGR, bufferedImage.getType());
+        is.close();
+
+        // for jpg format
+        is = this.getClass().getResourceAsStream("imageio-test.jpg");
+        iis = ImageIO.createImageInputStream(is);
+        iir = ImageIO.getImageReaders(iis);
+        assertTrue(iir.hasNext());
+
+        reader = iir.next();
+        reader.setInput(iis, true); // set the reader's source
+
+        assertEquals("com.sun.imageio.plugins.jpeg.JPEGImageReader", reader.getClass().getName());
+        assertEquals("JPEG", reader.getFormatName());
+
     }
 }
