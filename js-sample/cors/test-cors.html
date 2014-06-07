@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>Test CORS</title>
+	</head>
+	<body>
+		<h1>Test CORS</h1>
+		<div id="config">
+			<input type="text" id="target-url" value="" placeholder="Please input CORS target url" size="100" />
+			<input type="text" id="request-interval" value="" placeholder="Please set interval in ms" />
+		</div>
+		<input type="button" id="switch" onclick="doSwitch()" value="Start!" />
+		<table style="border:0;font-size:60">
+			<tr>
+				<td style="color:green">Success:<span id="success-count">0</span></td>
+				<td style="width:100px;text-align:center"></td>
+				<td style="color:red">Failed:<span id="failed-count">0</span></td>
+			</tr>
+		</table>
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script>
+			var started = false;
+			var timer;
+			function doSwitch() {
+				if (started) {
+					// stop
+					clearInterval(timer);
+					started = false;
+					$('#switch').val('Start!');
+					return;
+				}
+
+				// start
+				var targetUrl = $('#target-url').val();
+				var interval = parseInt($('#request-interval').val());
+				if (targetUrl == "") {
+					alert("target url is empty");
+					return;
+				}
+				var success = 0;
+				var fail = 0;
+				timer = setInterval(function() {
+					console.log("send cors request");
+					$.ajax({
+						url: targetUrl,
+						crossDomain: true,
+						success: function(data) {
+							success++;
+							$('#success-count').text(success);
+							console.log("success");
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							fail++;
+							$('#failed-count').text(fail);
+							console.log("fail: " + errorThrown);
+						}
+
+					});
+				}, interval);
+				started = true;
+				$('#switch').val('Stop!');
+			}
+		</script>
+	</body>
+	
+</html>
