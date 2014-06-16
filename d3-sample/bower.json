@@ -1,0 +1,8 @@
+{
+    "name":"d3-sample",
+    "version":"1.0",
+    "main":"d3-sample",
+    "dependencies": {
+        "d3":"~3.4.8"
+    }
+}
