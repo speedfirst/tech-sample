@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+  <appender name="general" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="file" value="logs/spring-mvc-sample.log"/>
+    <param name="DatePattern" value="'.' yyyy-MM-dd"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d] [%p] [%t] [%c:%F:%L] - %m%n"/>
+    </layout>
+  </appender>
+
+  <appender name="spring" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="file" value="logs/spring-mvc-sample.spring.log"/>
+    <param name="DatePattern" value="'.' yyyy-MM-dd"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d] [%p] [%t] [%c:%F:%L] - %m%n"/>
+    </layout>
+  </appender>
+
+  <logger name="org.springframework">
+    <level value="INFO" />
+    <appender-ref ref="spring" />
+  </logger>
+
+  <root>
+    <level value="WARN"/>
+    <appender-ref ref="general"/>
+  </root>
+
+</log4j:configuration>
