@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>D3 Transition Sample</title>
+	</head>
+	<body>
+		<script src="components/d3/d3.js"></script>
+		<script>
+			d3.select('body').transition().delay(750).each('start', function() { d3.select('body').style('background-color', 'white'); }).style('background-color', 'red');
+		</script>
+	</body>
+</html>
+
