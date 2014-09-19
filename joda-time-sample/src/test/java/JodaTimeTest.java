@@ -2,6 +2,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+
 import static org.junit.Assert.assertEquals;
 
 public class JodaTimeTest {
@@ -23,5 +26,12 @@ public class JodaTimeTest {
         // the 6 bytes ts can represent 10889 year, so 6 bytes are good enough to represent the time
         DateTime dt = new DateTime(0x00FFFFFFFFFFFFl, DateTimeZone.UTC);
         assertEquals("10889-08-02T05:31:50.655Z", dt.toString());
+    }
+
+    @Test
+    public void testSimpleFormat() {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String res = formatter.format(System.currentTimeMillis());
+        System.out.println(res);
     }
 }
