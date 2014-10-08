@@ -1,8 +1,7 @@
-package org.speedfirst.test;
+package org.speedfirst.test.forkjoin;
 
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
 /**
