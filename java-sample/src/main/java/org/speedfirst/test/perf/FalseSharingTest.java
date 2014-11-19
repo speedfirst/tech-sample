@@ -1,15 +1,24 @@
 package org.speedfirst.test.perf;
 
-public final class FalseSharingTest implements Runnable {
-    public final static int NUM_THREADS = 4; // change
+import sun.misc.Contended;
+
+/**
+ * Note, to make @Contended work, you must specify "-XX:-RestrictContended" to enable it in the VM arguments.
+ * Besides, you can use "-XX:FieldPaddingWidth" to control the padding size (default is 128bytes)
+ */
+public final class FalseSharingTest {
+    public final static int NUM_THREADS = 4;
+
     public final static long ITERATIONS = 500L * 1000L * 1000L;
-    private final int arrayIndex;
 
     private static VolatilePaddingLong[] paddingLongs = new VolatilePaddingLong[NUM_THREADS];
 
     private static VolatileNativeLong[] nativeLongs = new VolatileNativeLong[NUM_THREADS];
 
+    private static ContendedLongs contendedLongs = new ContendedLongs();
+
     static {
+        // init
         for (int i = 0; i < paddingLongs.length; i++) {
             paddingLongs[i] = new VolatilePaddingLong();
         }
@@ -19,30 +28,28 @@ public final class FalseSharingTest implements Runnable {
         }
     }
 
-    public FalseSharingTest(final int arrayIndex, boolean withPadding) {
-        this.arrayIndex = arrayIndex;
-        this.withPadding = withPadding;
-    }
-
-    private boolean withPadding;
-
     public static void main(final String[] args) throws Exception {
         System.out.println("========= With Padding ==========");
         final long start = System.nanoTime();
-        runTest(true);
+        runPaddingLongTest();
         System.out.println(String.format("duration = %,dns", (System.nanoTime() - start)));
         System.out.println();
         System.out.println("========= Without Padding ========");
         final long start2 = System.nanoTime();
-        runTest(false);
+        runNativeLongTest();
         System.out.println(String.format("duration = %,dns", (System.nanoTime() - start2)));
+        System.out.println();
+        System.out.println("========= With Contended Annotation ========");
+        final long start3 = System.nanoTime();
+        runContendedLongTest();
+        System.out.println(String.format("duration = %,dns", (System.nanoTime() - start3)));
     }
 
-    private static void runTest(boolean withPadding) throws InterruptedException {
+    private static void runPaddingLongTest() throws InterruptedException {
         Thread[] threads = new Thread[NUM_THREADS];
 
         for (int i = 0; i < threads.length; i++) {
-            threads[i] = new Thread(new FalseSharingTest(i, withPadding));
+            threads[i] = new Thread(new PaddingLongRunner(i));
         }
 
         for (Thread t : threads) {
@@ -54,25 +61,35 @@ public final class FalseSharingTest implements Runnable {
         }
     }
 
-    public void run() {
-        if (withPadding) {
-            doRunForPadding();
-        } else {
-            doRunForNative();
+    private static void runNativeLongTest() throws InterruptedException {
+        Thread[] threads = new Thread[NUM_THREADS];
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new NativeLongRunner(i));
+        }
+
+        for (Thread t : threads) {
+            t.start();
+        }
+
+        for (Thread t : threads) {
+            t.join();
         }
     }
 
-    public void doRunForPadding() {
-        long i = ITERATIONS + 1;
-        while (0 != --i) {
-            paddingLongs[arrayIndex].value = i;
-        }
-    }
+    private static void runContendedLongTest() throws InterruptedException {
+        Thread[] threads = new Thread[NUM_THREADS];
 
-    public void doRunForNative() {
-        long i = ITERATIONS + 1;
-        while (0 != --i) {
-            nativeLongs[arrayIndex].value = i;
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new ContendedLongRunner(i));
+        }
+
+        for (Thread t : threads) {
+            t.start();
+        }
+
+        for (Thread t : threads) {
+            t.join();
         }
     }
 
@@ -83,5 +100,111 @@ public final class FalseSharingTest implements Runnable {
 
     public final static class VolatileNativeLong {
         public volatile long value = 0L;
+    }
+
+    public final static class ContendedLongs {
+        @Contended
+        public volatile long value1;
+
+        @Contended
+        public volatile long value2;
+
+        @Contended
+        public volatile long value3;
+
+        @Contended
+        public volatile long value4;
+    }
+
+    public final static class PaddingLongRunner implements Runnable {
+
+        public PaddingLongRunner(int threadIdx) {
+            this.threadIdx = threadIdx;
+        }
+
+        private final int threadIdx;
+
+        @Override
+        public void run() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                paddingLongs[threadIdx].value = i;
+            }
+        }
+    }
+
+    public final static class NativeLongRunner implements Runnable {
+
+        public NativeLongRunner(int threadIdx) {
+            this.threadIdx = threadIdx;
+        }
+
+        private final int threadIdx;
+
+        @Override
+        public void run() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                nativeLongs[threadIdx].value = i;
+            }
+        }
+    }
+
+    public final static class ContendedLongRunner implements Runnable {
+
+        public ContendedLongRunner(int threadIdx) {
+            this.threadIdx = threadIdx;
+        }
+
+        private final int threadIdx;
+
+        @Override
+        public void run() {
+            switch (threadIdx) {
+                case 0:
+                    doRunForContendedValue1();
+                    break;
+                case 1:
+                    doRunForContendedValue2();
+                    break;
+                case 2:
+                    doRunForContendedValue3();
+                    break;
+                case 3:
+                    doRunForContendedValue4();
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+        }
+
+        public void doRunForContendedValue1() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                contendedLongs.value1 = i;
+            }
+        }
+
+        public void doRunForContendedValue2() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                contendedLongs.value2 = i;
+            }
+        }
+
+        public void doRunForContendedValue3() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                contendedLongs.value3 = i;
+            }
+        }
+
+        public void doRunForContendedValue4() {
+            long i = ITERATIONS + 1;
+            while (0 != --i) {
+                contendedLongs.value4 = i;
+            }
+        }
+
     }
 }
