@@ -2,6 +2,8 @@ package org.speedfirst.test.perf;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.regex.Pattern;
+
 /**
  * @author jiankuan
  * @since 1/14/15
@@ -83,6 +85,15 @@ public class JudgeArrayContainsDigit {
         }
     }
 
+    public static class PreCompiledRegexMethod implements JudgeContainsDigit {
+
+        Pattern pattern = Pattern.compile(".*\\d+.*");
+        @Override
+        public boolean judge(String text) {
+            return pattern.matcher(text).matches();
+        }
+    }
+
     public static class Regex2Method implements JudgeContainsDigit {
 
         @Override
@@ -106,6 +117,7 @@ public class JudgeArrayContainsDigit {
         run(new IterateMethod());
         run(new IsDigitMethod());
         run(new RegexMethod());
+        run(new PreCompiledRegexMethod());
         run(new Regex2Method());
         run(new StringUtilsMethod());
     }
