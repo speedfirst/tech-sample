@@ -102,6 +102,15 @@ public class JudgeArrayContainsDigit {
         }
     }
 
+    public static class RegexFindMethod implements JudgeContainsDigit {
+
+        Pattern pattern = Pattern.compile("[0-9]");
+        @Override
+        public boolean judge(String text) {
+            return pattern.matcher(text).find();
+        }
+    }
+
     public static class StringUtilsMethod implements JudgeContainsDigit {
 
         @Override
@@ -119,6 +128,7 @@ public class JudgeArrayContainsDigit {
         run(new RegexMethod());
         run(new PreCompiledRegexMethod());
         run(new Regex2Method());
+        run(new RegexFindMethod());
         run(new StringUtilsMethod());
     }
 
