@@ -1,10 +1,14 @@
 package org.speedfirst.ws.controllers;
 
+import org.speedfirst.ws.model.Hello;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class GreetingController {
@@ -16,6 +20,12 @@ public class GreetingController {
     @RequestMapping("greeting")
     public String greetByView(@RequestParam(value = "name", defaultValue = "defaultName") String name, Model model) {
         model.addAttribute("name", name);
+
+        Hello hello = new Hello(name);
+        model.addAttribute("hello", hello);
+
+        List<Integer> lists = Arrays.asList(1, 2, 3, 4, 5);
+        model.addAttribute("lists", lists);
         return "greeting";
     }
 
