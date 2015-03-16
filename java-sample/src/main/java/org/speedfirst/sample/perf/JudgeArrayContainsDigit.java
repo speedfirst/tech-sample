@@ -1,4 +1,4 @@
-package org.speedfirst.test.perf;
+package org.speedfirst.sample.perf;
 
 import org.apache.commons.lang3.StringUtils;
 

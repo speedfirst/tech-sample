@@ -1,4 +1,4 @@
-package org.speedfirst.test.perf;
+package org.speedfirst.sample.perf;
 
 import sun.misc.Contended;
 

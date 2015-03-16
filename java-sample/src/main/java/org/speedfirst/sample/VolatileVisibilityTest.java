@@ -1,4 +1,4 @@
-package org.speedfirst.test;
+package org.speedfirst.sample;
 
 /**
  * Created by jiankuan on 11/19/14.

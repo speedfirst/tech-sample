@@ -1,4 +1,4 @@
-package org.speedfirst.test.forkjoin;
+package org.speedfirst.sample.forkjoin;
 
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;

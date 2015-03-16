@@ -1,4 +1,4 @@
-package org.speedfirst.test;
+package org.speedfirst.sample;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

@@ -1,4 +1,4 @@
-package org.speedfirst.test.jaxb;
+package org.speedfirst.sample.jaxb;
 
 
 import javax.xml.bind.annotation.XmlElement;

@@ -1,4 +1,4 @@
-package org.speedfirst.test.io;
+package org.speedfirst.sample.io;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

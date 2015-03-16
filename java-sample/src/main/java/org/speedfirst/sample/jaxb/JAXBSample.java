@@ -1,4 +1,4 @@
-package org.speedfirst.test.jaxb;
+package org.speedfirst.sample.jaxb;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

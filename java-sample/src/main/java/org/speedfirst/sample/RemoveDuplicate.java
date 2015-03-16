@@ -1,4 +1,4 @@
-package org.speedfirst.test;
+package org.speedfirst.sample;
 
 
 import java.io.IOException;

@@ -1,6 +1,4 @@
-package org.speedfirst.test;
-
-import java.sql.Time;
+package org.speedfirst.sample;
 
 /**
  * Test string concat method in Java
